@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'end_of_round_screen.dart';
+import 'components/circular_countdown.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -97,48 +98,90 @@ class _GameScreenState extends State<GameScreen> {
       );
     }
     return Scaffold(
+      backgroundColor: const Color(0xFF399EF1),
       appBar: AppBar(
-        title: const Text('Game'),
-        automaticallyImplyLeading: !_isPlaying && _teamScores.every((s) => s == 0),
+        backgroundColor: const Color(0xFF399EF1),
+        foregroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        title: Text('Round ${_roundIdx + 1} of 3', style: TextStyle(color: Colors.white)),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
+      body: Center(
+        child: Container(
+          width: double.infinity,
+          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Round ${_roundIdx + 1} of 3: ${roundNames[_roundIdx]}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(roundNames[_roundIdx], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
-              Text('Team ${_teamIdx + 1}', style: const TextStyle(fontSize: 16)),
-              Text('Players: ${teams[_teamIdx].join(", ")}', style: const TextStyle(fontSize: 14)),
+              Text('Team ${_teamIdx + 1}', style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Color(0xFF399EF1))),
+              Text('Players: ${teams[_teamIdx].join(", ")}', style: const TextStyle(fontSize: 12)),
               const SizedBox(height: 24),
               if (!_isPlaying && _waitingForNextTeam)
-                ElevatedButton(
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF399EF1),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
                   onPressed: () {
                     setState(() {
                       _waitingForNextTeam = false;
                     });
                     _startTurn(secondsPerTurn);
                   },
-                  child: const Text('Start'),
+                  icon: const Icon(Icons.play_arrow),
+                  label: const Text('Start'),
                 ),
               if (!_isPlaying && !_waitingForNextTeam && !_teamScores.any((s) => s > 0))
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF399EF1),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
                   onPressed: () => _startTurn(secondsPerTurn),
                   child: const Text('Start'),
                 ),
               if (_isPlaying) ...[
-                Text('Time left: $_secondsLeft s', style: const TextStyle(fontSize: 20)),
+                CircularCountdown(
+                  secondsLeft: _secondsLeft,
+                  totalSeconds: secondsPerTurn,
+                ),
                 const SizedBox(height: 8),
                 Text('Words left: ${_roundWords.length}', style: const TextStyle(fontSize: 16)),
                 const SizedBox(height: 8),
                 if (_remainingWords.isNotEmpty)
                   Column(
                     children: [
-                      Text(_remainingWords[_wordIdx], style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+                      // Text(_remainingWords[_wordIdx], style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 16),
-                      ElevatedButton(
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 48, 199, 48),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
                         onPressed: () {
                           setState(() {
                             _score++;
@@ -158,7 +201,8 @@ class _GameScreenState extends State<GameScreen> {
                             }
                           });
                         },
-                        child: const Text('Correct'),
+                        icon: const Icon(Icons.check),
+                        label: const Text('Correct'),
                       ),
                     ],
                   )
@@ -167,10 +211,12 @@ class _GameScreenState extends State<GameScreen> {
                 const SizedBox(height: 24),
                 Text('Score this turn: $_score'),
               ],
-              const SizedBox(height: 24),
-              Text('Scores:', style: const TextStyle(fontWeight: FontWeight.bold)),
-              for (int i = 0; i < numTeams; i++)
-                Text('Team ${i + 1}: ${_teamScores[i]}'),
+              // const SizedBox(height: 24),
+              // if (!_isPlaying && !_waitingForNextTeam) ...[
+              // Text('Scores:', style: const TextStyle(fontWeight: FontWeight.bold)),
+              // for (int i = 0; i < numTeams; i++)
+              //   Text('Team ${i + 1}: ${_teamScores[i]}'),
+              // ],
             ],
           ),
         ),

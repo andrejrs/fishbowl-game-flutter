@@ -14,10 +14,12 @@ class _SetupScreenState extends State<SetupScreen> {
   int _secondsPerTurn = 10;
   final List<String> _playerNames = [];
   final TextEditingController _nameController = TextEditingController();
+  final FocusNode _wordFocusNode = FocusNode();
 
   @override
   void dispose() {
     _nameController.dispose();
+    _wordFocusNode.dispose();
     super.dispose();
   }
 
@@ -28,15 +30,38 @@ class _SetupScreenState extends State<SetupScreen> {
         _playerNames.add(name);
         _nameController.clear();
       });
+      // Refocus the input after adding a word
+      Future.delayed(const Duration(milliseconds: 100), () {
+        _wordFocusNode.requestFocus();
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Fishbowl Setup')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      backgroundColor: const Color(0xFF399EF1),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF399EF1),
+        foregroundColor: Colors.white,
+        title: const Text('Fishbowl Setup', style: TextStyle(color: Colors.white)),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Center(
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
         child: Form(
           key: _formKey,
           child: ListView(
@@ -116,6 +141,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     Expanded(
                       child: TextField(
                         controller: _nameController,
+                        focusNode: _wordFocusNode,
                         decoration: const InputDecoration(labelText: 'Player name'),
                         onSubmitted: (_) => _addPlayerName(),
                       ),
@@ -128,6 +154,13 @@ class _SetupScreenState extends State<SetupScreen> {
                 ),
               const SizedBox(height: 24),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF399EF1),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
                 onPressed: _playerNames.length == _numPlayers
                     ? () {
                         Navigator.pushNamed(context, '/teams', arguments: {
@@ -144,7 +177,9 @@ class _SetupScreenState extends State<SetupScreen> {
             ],
           ),
         ),
+        ),
       ),
     );
   }
 }
+

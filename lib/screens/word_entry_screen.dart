@@ -69,9 +69,28 @@ class _WordEntryScreenState extends State<WordEntryScreen> {
     final words = _playerWords[currentPlayer] ?? <String>[];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Word Entry')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      backgroundColor: const Color(0xFF399EF1),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF399EF1),
+        foregroundColor: Colors.white,
+        title: const Text('Word Entry', style: TextStyle(color: Colors.white)),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Center(
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -114,10 +133,18 @@ class _WordEntryScreenState extends State<WordEntryScreen> {
               ),
             const SizedBox(height: 24),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF399EF1),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
               onPressed: words.length == wordsPerPlayer ? () => _nextPlayer(playerNames, args) : null,
               child: Text(_currentPlayerIdx < playerNames.length - 1 ? 'Next Player' : 'Continue'),
             ),
           ],
+        ),
         ),
       ),
     );
