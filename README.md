@@ -107,3 +107,22 @@ Feel free to fork, modify, and improve it!
 
 **Created by:** Andrej  
 **Inspiration:** Team Building fun and the power of AI-assisted coding 💡
+
+## 📸 Screenshots
+
+Here are a few preview screens from the Fishbowl Game app:
+
+### 🏠 Home Screen
+![Home screen showing team and player setup](assets/screenshots/home_screen.png)
+
+### 👥 Team Overview
+![Screen showing teams and assigned players](assets/screenshots/teams_screen.png)
+
+### 🎮 Gameplay
+![Gameplay screen showing the current word and timer](assets/screenshots/gameplay_screen.png)
+
+### 🎮 Start of Round
+![Gameplay screen showing the current word and timer](assets/screenshots/round_start.png)
+
+### 🎮 End of Round
+![Gameplay screen showing the current word and timer](assets/screenshots/end_round.png)
