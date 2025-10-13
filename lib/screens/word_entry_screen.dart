@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 
+/// Screen for entering words for each player in the Fishbowl game.
+/// Prevents duplicate word entry across all players.
 class WordEntryScreen extends StatefulWidget {
+  /// Creates a [WordEntryScreen].
   const WordEntryScreen({super.key});
   @override
   State<WordEntryScreen> createState() => _WordEntryScreenState();
 }
 
+/// State for [WordEntryScreen]. Handles word entry, duplicate checking, and player switching.
 class _WordEntryScreenState extends State<WordEntryScreen> {
+  /// The word that is a duplicate, if any. Used to show error state.
   String? _duplicateWord;
   int _currentPlayerIdx = 0;
   final Map<String, List<String>> _playerWords = {};
   final TextEditingController _wordController = TextEditingController();
   final FocusNode _wordFocusNode = FocusNode();
 
+  /// Disposes controllers and focus nodes.
   @override
   void dispose() {
     _wordController.dispose();
@@ -20,6 +26,11 @@ class _WordEntryScreenState extends State<WordEntryScreen> {
     super.dispose();
   }
 
+  /// Adds a word for the current player if it is unique and valid.
+  ///
+  /// [words] - The list of words already entered by the current player.
+  /// [currentPlayer] - The name of the player currently entering words.
+  /// [wordsPerPlayer] - The maximum number of words each player should enter.
   void _addWord(List<String> words, String currentPlayer, int wordsPerPlayer) {
     final word = _wordController.text.trim();
     final allWords = <String>[];
@@ -43,6 +54,10 @@ class _WordEntryScreenState extends State<WordEntryScreen> {
     });
   }
 
+  /// Advances to the next player or proceeds to the game if all words are entered.
+  ///
+  /// [playerNames] - The list of all player names.
+  /// [args] - The arguments to pass to the game screen.
   void _nextPlayer(List<String> playerNames, Map<String, dynamic> args) {
     if (_currentPlayerIdx < playerNames.length - 1) {
       setState(() {
@@ -59,6 +74,7 @@ class _WordEntryScreenState extends State<WordEntryScreen> {
     }
   }
 
+  /// Builds the word entry UI.
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;

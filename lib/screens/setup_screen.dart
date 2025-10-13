@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
+/// The initial setup screen for the Fishbowl game.
+/// Allows users to configure teams, players, words per player, and turn duration.
 class SetupScreen extends StatefulWidget {
+  /// Creates a [SetupScreen].
   const SetupScreen({super.key});
+
+  /// Builds the setup UI for entering game parameters.
   @override
   State<SetupScreen> createState() => _SetupScreenState();
 }

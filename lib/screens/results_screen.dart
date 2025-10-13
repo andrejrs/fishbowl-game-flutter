@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'components/podium_screen.dart';
 
+/// Screen displaying the final results and scores for all teams at the end of the game.
 class ResultsScreen extends StatelessWidget {
+  /// Creates a [ResultsScreen].
   const ResultsScreen({super.key});
+
+  /// Builds the results UI and provides a button to restart the game.
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;

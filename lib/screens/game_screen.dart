@@ -3,13 +3,20 @@ import 'dart:async';
 import 'end_of_round_screen.dart';
 import 'components/circular_countdown.dart';
 
+/// Main gameplay screen for the Fishbowl game.
+/// Handles team turns, word guessing, scoring, and round transitions.
 class GameScreen extends StatefulWidget {
+  /// Creates a [GameScreen].
   const GameScreen({super.key});
   @override
   State<GameScreen> createState() => _GameScreenState();
 }
 
+/// State for [GameScreen]. Manages game logic, timers, and UI updates.
 class _GameScreenState extends State<GameScreen> {
+  /// Starts a team's turn, initializing timer and shuffling remaining words.
+  ///
+  /// [secondsPerTurn] - The number of seconds for each team's turn.
   void _startTurn(int secondsPerTurn) {
     setState(() {
       _isPlaying = true;
@@ -29,6 +36,7 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+  /// Ends the current team's turn, updates scores, and advances to the next team or ends the round.
   void _endTurn() {
     _timer?.cancel();
     setState(() {
@@ -54,6 +62,10 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+  /// Advances to the next round or ends the game if all rounds are complete.
+  ///
+  /// [numTeams] - The number of teams in the game.
+  /// [numRounds] - The total number of rounds in the game.
   void _nextRoundOrEnd(int numTeams, int numRounds) {
     if (_roundIdx < numRounds - 1) {
       setState(() {
@@ -72,6 +84,8 @@ class _GameScreenState extends State<GameScreen> {
       });
     }
   }
+
+  /// Builds the main game UI, including timer, word display, and score.
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -89,6 +103,7 @@ class _GameScreenState extends State<GameScreen> {
     }
 
     if (_showEndOfRound) {
+      // Show EndOfRoundScreen and wait for pop, then continue to next round or results
       return EndOfRoundScreen(
         roundNumber: _roundIdx + 1,
         teamScores: _teamScores,
