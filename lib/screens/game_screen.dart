@@ -118,7 +118,7 @@ class _GameScreenState extends State<GameScreen> {
         backgroundColor: const Color(0xFF399EF1),
         foregroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        title: Text('Round ${_roundIdx + 1} of 3', style: TextStyle(color: Colors.white)),
+        title: Text('Round ${_roundIdx + 1} of 3 - ${roundNames[_roundIdx]}', style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Center(
@@ -141,10 +141,11 @@ class _GameScreenState extends State<GameScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(roundNames[_roundIdx], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
+              if (!_isPlaying) ...[
               Text('Team ${_teamIdx + 1}', style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Color(0xFF399EF1))),
               Text('Players: ${teams[_teamIdx].join(", ")}', style: const TextStyle(fontSize: 12)),
+              ],
               const SizedBox(height: 24),
               if (!_isPlaying && _waitingForNextTeam)
                 ElevatedButton.icon(
@@ -181,13 +182,11 @@ class _GameScreenState extends State<GameScreen> {
                   secondsLeft: _secondsLeft,
                   totalSeconds: secondsPerTurn,
                 ),
-                const SizedBox(height: 8),
-                Text('Words left: ${_roundWords.length}', style: const TextStyle(fontSize: 16)),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 if (_remainingWords.isNotEmpty)
                   Column(
                     children: [
-                      // Text(_remainingWords[_wordIdx], style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+                      Text(_remainingWords[_wordIdx], style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFF399EF1))),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
@@ -225,6 +224,7 @@ class _GameScreenState extends State<GameScreen> {
                   const Text('No more words!'),
                 const SizedBox(height: 24),
                 Text('Score this turn: $_score'),
+                Text('Words left: ${_roundWords.length}'),
               ],
               // const SizedBox(height: 24),
               // if (!_isPlaying && !_waitingForNextTeam) ...[
