@@ -1,0 +1,200 @@
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'end_of_round_screen.dart';
+
+class GameScreen extends StatefulWidget {
+  const GameScreen({super.key});
+  @override
+  State<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  void _startTurn(int secondsPerTurn) {
+    setState(() {
+      _isPlaying = true;
+      _secondsLeft = secondsPerTurn;
+      _score = 0;
+      _remainingWords = List<String>.from(_roundWords);
+      _remainingWords.shuffle();
+      _wordIdx = 0;
+    });
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _secondsLeft--;
+        if (_secondsLeft <= 0) {
+          _endTurn();
+        }
+      });
+    });
+  }
+
+  void _endTurn() {
+    _timer?.cancel();
+    setState(() {
+      _isPlaying = false;
+      _teamScores[_teamIdx] += _score;
+    });
+    Future.delayed(const Duration(milliseconds: 500), () {
+      final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      if (args == null) return;
+      final int numTeams = args['numTeams'];
+      if (mounted) {
+        if (_roundWords.isEmpty) {
+          setState(() {
+            _showEndOfRound = true;
+          });
+        } else {
+          setState(() {
+            _teamIdx = (_teamIdx + 1) % numTeams;
+            _waitingForNextTeam = true;
+          });
+        }
+      }
+    });
+  }
+
+  void _nextRoundOrEnd(int numTeams, int numRounds) {
+    if (_roundIdx < numRounds - 1) {
+      setState(() {
+        _showEndOfRound = false;
+        _roundIdx++;
+        _teamIdx = 0;
+        _waitingForNextTeam = true;
+        final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+        if (args != null) {
+          _roundWords = List<String>.from(args['words']);
+        }
+      });
+    } else {
+      Navigator.pushReplacementNamed(context, '/results', arguments: {
+        'teamScores': _teamScores,
+      });
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final int numTeams = args['numTeams'];
+    final int secondsPerTurn = args['secondsPerTurn'];
+    final List<List<String>> teams = (args['teams'] as List).map((e) => List<String>.from(e)).toList();
+    final List<String> words = List<String>.from(args['words']);
+
+    if (_teamScores.length != numTeams) {
+      _teamScores = List.filled(numTeams, 0);
+    }
+    // Initialize round words at start of each round
+    if (_roundWords.isEmpty && !_showEndOfRound) {
+      _roundWords = List<String>.from(words);
+    }
+
+    if (_showEndOfRound) {
+      return EndOfRoundScreen(
+        roundNumber: _roundIdx + 1,
+        teamScores: _teamScores,
+        onNextRound: () {
+          _nextRoundOrEnd(numTeams, 3);
+        },
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Game'),
+        automaticallyImplyLeading: !_isPlaying && _teamScores.every((s) => s == 0),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Round ${_roundIdx + 1} of 3: ${roundNames[_roundIdx]}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 12),
+              Text('Team ${_teamIdx + 1}', style: const TextStyle(fontSize: 16)),
+              Text('Players: ${teams[_teamIdx].join(", ")}', style: const TextStyle(fontSize: 14)),
+              const SizedBox(height: 24),
+              if (!_isPlaying && _waitingForNextTeam)
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _waitingForNextTeam = false;
+                    });
+                    _startTurn(secondsPerTurn);
+                  },
+                  child: const Text('Start'),
+                ),
+              if (!_isPlaying && !_waitingForNextTeam && !_teamScores.any((s) => s > 0))
+                ElevatedButton(
+                  onPressed: () => _startTurn(secondsPerTurn),
+                  child: const Text('Start'),
+                ),
+              if (_isPlaying) ...[
+                Text('Time left: $_secondsLeft s', style: const TextStyle(fontSize: 20)),
+                const SizedBox(height: 8),
+                Text('Words left: ${_roundWords.length}', style: const TextStyle(fontSize: 16)),
+                const SizedBox(height: 8),
+                if (_remainingWords.isNotEmpty)
+                  Column(
+                    children: [
+                      Text(_remainingWords[_wordIdx], style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _score++;
+                            String guessed = _remainingWords[_wordIdx];
+                            _roundWords.remove(guessed);
+                            _remainingWords.removeAt(_wordIdx);
+                            if (_roundWords.isEmpty) {
+                              // End round immediately if last word guessed
+                              _timer?.cancel();
+                              _isPlaying = false;
+                              _teamScores[_teamIdx] += _score;
+                              _showEndOfRound = true;
+                            } else if (_remainingWords.isEmpty) {
+                              _endTurn();
+                            } else {
+                              _wordIdx = _wordIdx % _remainingWords.length;
+                            }
+                          });
+                        },
+                        child: const Text('Correct'),
+                      ),
+                    ],
+                  )
+                else
+                  const Text('No more words!'),
+                const SizedBox(height: 24),
+                Text('Score this turn: $_score'),
+              ],
+              const SizedBox(height: 24),
+              Text('Scores:', style: const TextStyle(fontWeight: FontWeight.bold)),
+              for (int i = 0; i < numTeams; i++)
+                Text('Team ${i + 1}: ${_teamScores[i]}'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  bool _showEndOfRound = false;
+  int _roundIdx = 0;
+  int _teamIdx = 0;
+  int _wordIdx = 0;
+  int _score = 0;
+  int _secondsLeft = 0;
+  bool _isPlaying = false;
+  Timer? _timer;
+  List<String> _remainingWords = [];
+  List<String> _roundWords = [];
+  List<int> _teamScores = [];
+  bool _waitingForNextTeam = false;
+
+  static const List<String> roundNames = [
+    'Taboo (Verbal Explanation)',
+    'Charades',
+    'One Word',
+  ];
+
+  // ...methods and build() go here...
+}
