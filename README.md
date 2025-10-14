@@ -3,6 +3,19 @@
 **Fishbowl** is a fun, team-based party game where players try to guess words or phrases from a "fishbowl" across **three rounds** each with different rules.  
 This project is a **Flutter application prototype** that allows teams to play Fishbowl digitally, no paper, no pens, no setup hassle!
 
+### 🔗 Quick Links
+
+| 📘 Section | 🔍 Description |
+|-------------|----------------|
+| [🎯 Game Overview](#-game-overview) | Learn how the Fishbowl Game works and its 3 fun rounds. |
+| [🧩 How It Works](#-how-it-works) | Learn how the Fishbowl screens. |
+| [🛠️ Tech Stack](#️-tech-stack) | Tools and technologies used to build the app. |
+| [🚀 Future Improvements](#-future-improvements) | See what’s planned for future updates. |
+| [📱 Purpose](#-purpose) | See the goal of this project is twofold. |
+| [⚙️ Setup & Installation](./SETUP_GUIDE.md) | Step-by-step guide for running and building the project in VS Code. |
+| [📄 License](#-license) | Licensing information for the project. |
+| [📸 Screenshots](#-screenshots) | A few preview screens from the Fishbowl Game app. |
+
 ## 💡 Project Idea
 
 This project was born from a **Team Building event** where we wanted to play *Associations (Fishbowl-style)* but forgot paper and pens.  
@@ -102,6 +115,17 @@ Together, we can make *Fishbowl Game* a fun and polished app for everyone to enj
 This project is released under the **MIT License**.  
 Feel free to fork, modify, and improve it!
 
+## ⚙️ Setup & Installation
+
+If you’d like to run or build the project locally, please check the setup guide:
+
+📄 [SETUP_GUIDE.md](./SETUP_GUIDE.md)
+
+This document includes step-by-step instructions for:
+- Importing the project into Visual Studio Code  
+- Installing dependencies  
+- Running the app on an emulator or device  
+- Building the APK for Android
 
 ### 👤 Author
 
