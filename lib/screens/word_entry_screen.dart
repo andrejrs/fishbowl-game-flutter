@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fishbowl/config/environment.dart';
+import 'package:fishbowl/data/dummy_data.dart';
 
 /// Screen for entering words for each player in the Fishbowl game.
 /// Prevents duplicate word entry across all players.
@@ -13,8 +15,8 @@ class WordEntryScreen extends StatefulWidget {
 class _WordEntryScreenState extends State<WordEntryScreen> {
   /// The word that is a duplicate, if any. Used to show error state.
   String? _duplicateWord;
-  int _currentPlayerIdx = 0;
-  final Map<String, List<String>> _playerWords = {};
+  int _currentPlayerIdx = useDummyData ? dummyPlayerNames.length-1 : 0;
+  final Map<String, List<String>> _playerWords = useDummyData ? dummyPlayerWords : {};
   final TextEditingController _wordController = TextEditingController();
   final FocusNode _wordFocusNode = FocusNode();
 
@@ -113,7 +115,34 @@ class _WordEntryScreenState extends State<WordEntryScreen> {
             Text('Player: $currentPlayer', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Text('Enter $wordsPerPlayer words:'),
-            ...words.map((w) => ListTile(title: Text(w))),
+            ...words.asMap().entries.map((entry) {
+              final index = entry.key;   // redni broj
+              final word = entry.value;  // sama reč
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.grey[50], // svetla pozadina
+                  border: Border.all(color: Colors.grey.shade300), // tanka ivica
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.03),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Text('${index + 1}.', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(width: 8),
+                    Expanded(child: Text(word)),
+                  ],
+                ),
+              );
+            }).toList(),
+
             if (words.length < wordsPerPlayer)
               Row(
                 children: [

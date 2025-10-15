@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fishbowl/config/environment.dart';
+import 'package:fishbowl/data/dummy_data.dart';
 
 /// The initial setup screen for the Fishbowl game.
 /// Allows users to configure teams, players, words per player, and turn duration.
@@ -14,10 +16,11 @@ class SetupScreen extends StatefulWidget {
 class _SetupScreenState extends State<SetupScreen> {
   final _formKey = GlobalKey<FormState>();
   int _numTeams = 2;
-  int _numPlayers = 2;
-  int _wordsPerPlayer = 2;
-  int _secondsPerTurn = 10;
-  final List<String> _playerNames = [];
+  int _numPlayers = useDummyData ? dummyPlayerNames.length : 2;
+  int _wordsPerPlayer = useDummyData ? totalWordsPerUser : 2;
+  int _secondsPerTurn = useDummyData ? 10 : 60;
+
+  final List<String> _playerNames = useDummyData ? dummyPlayerNames : [];
   final TextEditingController _nameController = TextEditingController();
   final FocusNode _wordFocusNode = FocusNode();
 
@@ -139,7 +142,33 @@ class _SetupScreenState extends State<SetupScreen> {
               ),
               const SizedBox(height: 24),
               const Text('Enter player names:'),
-              ..._playerNames.map((name) => ListTile(title: Text(name))),
+              ..._playerNames.asMap().entries.map((entry) {
+                final index = entry.key;
+                final name = entry.value;
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50], // svetla pozadina
+                    border: Border.all(color: Colors.grey.shade300), // tanak okvir
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      )
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Text('${index + 1}. ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Expanded(child: Text(name)),
+                    ],
+                  ),
+                );
+              }).toList(),
+
               if (_playerNames.length < _numPlayers)
                 Row(
                   children: [
