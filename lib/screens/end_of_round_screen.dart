@@ -44,47 +44,82 @@ class EndOfRoundScreen extends StatelessWidget {
           children: [
             Text('Current Scores:', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: List.generate(numTeams, (i) {
+                final int maxScore = teamScores.reduce((a, b) => a > b ? a : b);
+                final double percentage = maxScore == 0 ? 0 : teamScores[i] / maxScore;
+                final Color textColor = percentage < 0.2 ? Colors.black : Colors.white;
+
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Chip(
-                    backgroundColor: const Color.fromARGB(255, 57, 158, 241),
-                    label: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Team ${i + 1}', // Team name
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Stack(
+                    alignment: Alignment.centerLeft,
+                    children: [
+                      // empty bar
+                      Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+
+                      // blue part
+                      FractionallySizedBox(
+                        widthFactor: percentage,
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF399EF1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+
+                        ),
+                      ),
+
+                      // name outside for 0 points
+                        Positioned(
+                          left: 16,
+                          child: Text(
+                            'Team ${i + 1}',
+                            style: TextStyle(
+                              color: textColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        CircleAvatar(
-                          backgroundColor: Color(0xFFFFA500),
+
+                      // Krug sa rezultatom (uvek vidljiv)
+                      Positioned(
+                        right: 16,
+                        child: CircleAvatar(
+                          backgroundColor: const Color(0xFFFFA500),
                           child: Text(
-                            '${teamScores[i]}', // Score inside avatar
+                            '${teamScores[i]}',
                             style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 );
               }),
             ),
+
             const SizedBox(height: 32),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF399EF1),
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
                 textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
