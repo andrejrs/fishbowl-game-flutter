@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'end_of_round_screen.dart';
 import 'components/circular_countdown.dart';
+import 'package:fishbowl/widgets/team_row.dart';
 
 /// Main gameplay screen for the Fishbowl game.
 /// Handles team turns, word guessing, scoring, and round transitions.
@@ -94,23 +95,6 @@ class _GameScreenState extends State<GameScreen> {
     final List<List<String>> teams = (args['teams'] as List).map((e) => List<String>.from(e)).toList();
     final List<String> words = List<String>.from(args['words']);
 
-  /// Returns a color based on player name for consistent avatar colors
-  Color _getColorFromName(String name) {
-    final colors = [
-      Colors.blue,
-      Colors.red,
-      Colors.green,
-      Colors.orange,
-      Colors.purple,
-      Colors.teal,
-      Colors.pink,
-      Colors.indigo,
-      Colors.brown,
-    ];
-    final code = name.codeUnits.fold(0, (a, b) => a + b);
-    return colors[code % colors.length];
-  }
-
     if (_teamScores.length != numTeams) {
       _teamScores = List.filled(numTeams, 0);
     }
@@ -161,38 +145,14 @@ class _GameScreenState extends State<GameScreen> {
               const SizedBox(height: 12),
               if (!_isPlaying) ...[
                 Text(roundNames[_roundIdx], style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                Text(roundDescriptions[_roundIdx], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 24),
                 Text('Team ${_teamIdx + 1} are you ready?', style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Color(0xFF399EF1))),
                 // Text('Players: ${teams[_teamIdx].join(", ")}', style: const TextStyle(fontSize: 12)),
                 const SizedBox(height: 24),
-                Row(
+                TeamRow(
+                  players: teams[_teamIdx],
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: teams[_teamIdx].map((name) {
-                    final color = _getColorFromName(name);
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 24,
-                            backgroundColor: color,
-                            child: Text(
-                              name[0].toUpperCase(),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            name,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
                 ),
               ],
               const SizedBox(height: 24),
@@ -301,9 +261,15 @@ class _GameScreenState extends State<GameScreen> {
   bool _waitingForNextTeam = false;
 
   static const List<String> roundNames = [
-    'Taboo (Verbal Explanation)',
+    'Taboo',
     'Charades',
     'One Word',
+  ];
+
+  static const List<String> roundDescriptions = [
+    '(Verbal Explanation)',
+    '(Act it out silently)',
+    '(Give only a single-word clue)',
   ];
 
   // ...methods and build() go here...

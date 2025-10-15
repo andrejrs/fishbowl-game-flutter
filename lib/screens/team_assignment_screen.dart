@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:fishbowl/widgets/team_row.dart';
 
 /// Screen for randomly assigning players to teams and displaying the assignments.
 class TeamAssignmentScreen extends StatelessWidget {
@@ -18,23 +19,6 @@ class TeamAssignmentScreen extends StatelessWidget {
       teams[i % numTeams].add(shuffled[i]);
     }
     return teams;
-  }
-
-  /// Returns a color based on player name for consistent avatar colors
-  Color _getColorFromName(String name) {
-    final colors = [
-      Colors.blue,
-      Colors.red,
-      Colors.green,
-      Colors.orange,
-      Colors.purple,
-      Colors.teal,
-      Colors.pink,
-      Colors.indigo,
-      Colors.brown,
-    ];
-    final code = name.codeUnits.fold(0, (a, b) => a + b);
-    return colors[code % colors.length];
   }
 
   /// Builds the team assignment UI.
@@ -92,34 +76,9 @@ class TeamAssignmentScreen extends StatelessWidget {
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                             const SizedBox(height: 8),
-                            Row(
+                            TeamRow(
+                              players: team,
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: team.map((name) {
-                                final color = _getColorFromName(name);
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Column(
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 24,
-                                        backgroundColor: color,
-                                        child: Text(
-                                          name[0].toUpperCase(),
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        name,
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
                             ),
                           ],
                         ),
