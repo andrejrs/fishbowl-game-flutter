@@ -52,6 +52,7 @@ class _GameScreenState extends State<GameScreen> {
       if (mounted) {
         if (_roundWords.isEmpty) {
           setState(() {
+            _teamIdx = (_teamIdx + 1) % numTeams;
             _showEndOfRound = true;
           });
         } else {
@@ -73,7 +74,7 @@ class _GameScreenState extends State<GameScreen> {
       setState(() {
         _showEndOfRound = false;
         _roundIdx++;
-        _teamIdx = 0;
+        _teamIdx = (_teamIdx + 1) % numTeams;
         _waitingForNextTeam = true;
         final args =
             ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fishbowl/config/environment.dart';
 import 'package:fishbowl/data/dummy_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 /// The initial setup screen for the Fishbowl game.
 /// Allows users to configure teams, players, words per player, and turn duration.
@@ -29,6 +31,29 @@ class _SetupScreenState extends State<SetupScreen> {
     _nameController.dispose();
     _wordFocusNode.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPlayers();
+  }
+
+  Future<void> _savePlayers() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('playerNames', _playerNames);
+  }
+
+  Future<void> _loadPlayers() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedPlayers = prefs.getStringList('playerNames');
+    if (savedPlayers != null && savedPlayers.isNotEmpty) {
+      setState(() {
+        _playerNames.clear();
+        _playerNames.addAll(savedPlayers);
+        _numPlayers = _playerNames.length;
+      });
+    }
   }
 
   void _addPlayerName() {
@@ -164,6 +189,15 @@ class _SetupScreenState extends State<SetupScreen> {
                     children: [
                       Text('${index + 1}. ', style: const TextStyle(fontWeight: FontWeight.bold)),
                       Expanded(child: Text(name)),
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.redAccent),
+                        tooltip: 'Remove player',
+                        onPressed: () {
+                          setState(() {
+                            _playerNames.removeAt(index);
+                          });
+                        },
+                      ),
                     ],
                   ),
                 );
@@ -197,6 +231,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 ),
                 onPressed: _playerNames.length == _numPlayers
                     ? () {
+                        _savePlayers();
                         Navigator.pushNamed(context, '/teams', arguments: {
                           'numTeams': _numTeams,
                           'numPlayers': _numPlayers,
