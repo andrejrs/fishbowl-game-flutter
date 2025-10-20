@@ -302,16 +302,9 @@ class _GameScreenState extends State<GameScreen> {
                       )
                     else
                       const Text('No more words!'),
-                    const SizedBox(height: 24),
-                    Text('Score this turn: $_score'),
-                    Text('Words left: ${_roundWords.length}'),
                   ],
-                  // const SizedBox(height: 24),
-                  // if (!_isPlaying && !_waitingForNextTeam) ...[
-                  // Text('Scores:', style: const TextStyle(fontWeight: FontWeight.bold)),
-                  // for (int i = 0; i < numTeams; i++)
-                  //   Text('Team ${i + 1}: ${_teamScores[i]}'),
-                  // ],
+                  const SizedBox(height: 24),
+                  Text('Words left: ${_roundWords.length}'),
                 ],
               ),
             ),

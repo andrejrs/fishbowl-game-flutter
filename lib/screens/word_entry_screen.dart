@@ -133,13 +133,29 @@ class _WordEntryScreenState extends State<WordEntryScreen> {
                     ),
                   ],
                 ),
-                child: Row(
-                  children: [
-                    Text('${index + 1}.', style: const TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text(word)),
-                  ],
-                ),
+                  child: Row(
+                    children: [
+                      Text('${index + 1}.', style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 8),
+                      Expanded(child: Text(word)),
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.redAccent),
+                        tooltip: 'Remove word',
+                        onPressed: () {
+                          setState(() {
+                            words.removeAt(index);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                // child: Row(
+                //   children: [
+                //     Text('${index + 1}.', style: const TextStyle(fontWeight: FontWeight.bold)),
+                //     const SizedBox(width: 8),
+                //     Expanded(child: Text(word)),
+                //   ],
+                // ),
               );
             }).toList(),
 
