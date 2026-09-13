@@ -223,6 +223,12 @@
     text-decoration: none;
   }
 
+  .links a[aria-disabled="true"] {
+    color: var(--muted);
+    cursor: default;
+    pointer-events: none;
+  }
+
   strong { font-weight: 600; }
 
   a {
@@ -288,6 +294,12 @@
         <span class="round-num">ROUND 3</span>
         <p><strong>One Word</strong> Describe the term using only one word.</p>
       </div>
+    </div>
+
+    <h2>Download</h2>
+    <div class="links">
+      <a href="#" aria-disabled="true" title="Coming soon">▶️ Get it on Google Play (coming soon)</a>
+      <a href="https://github.com/andrejrs/fishbowl-game-flutter/releases/latest" target="_blank" rel="noopener">⬇️ Download Latest APK (GitHub)</a>
     </div>
 
     <h2>Getting Started</h2>
