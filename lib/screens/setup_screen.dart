@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fishbowl/config/environment.dart';
 import 'package:fishbowl/data/dummy_data.dart';
+import 'package:fishbowl/screens/components/how_to_play_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -79,6 +80,13 @@ class _SetupScreenState extends State<SetupScreen> {
         foregroundColor: Colors.white,
         title: const Text('Fishbowl Setup', style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline),
+            tooltip: 'How to Play',
+            onPressed: () => showHowToPlayDialog(context),
+          ),
+        ],
       ),
       body: Center(
         child: Container(

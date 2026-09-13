@@ -55,6 +55,15 @@ void main() {
     expect(find.widgetWithText(TextFormField, '60'), findsOneWidget);
   });
 
+  testWidgets('the help icon opens the How to Play dialog', (tester) async {
+    await pump(tester);
+
+    await tester.tap(find.byIcon(Icons.help_outline));
+    await tester.pumpAndSettle();
+
+    expect(find.text('How to Play'), findsOneWidget);
+  });
+
   testWidgets('Continue is disabled until all player names are entered', (tester) async {
     await pump(tester);
 
