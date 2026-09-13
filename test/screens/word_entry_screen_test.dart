@@ -66,6 +66,16 @@ void main() {
     expect(nextButton.onPressed, isNull);
   });
 
+  testWidgets('submitting the word field (keyboard "done") adds the word', (tester) async {
+    await pump(tester, playerNames: ['Alice', 'Bob']);
+
+    await tester.enterText(find.widgetWithText(TextField, 'Word'), 'apple');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pump(const Duration(milliseconds: 150));
+
+    expect(find.text('apple'), findsOneWidget);
+  });
+
   testWidgets('rejects a duplicate word for the same player and shows an error', (tester) async {
     await pump(tester, playerNames: ['Alice', 'Bob']);
 

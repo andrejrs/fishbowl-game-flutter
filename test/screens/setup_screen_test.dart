@@ -165,6 +165,96 @@ void main() {
     expect(find.widgetWithText(TextField, 'Player name'), findsNothing);
   });
 
+  testWidgets('changing words per player is reflected in the config passed onward', (tester) async {
+    await pump(tester);
+
+    await tester.enterText(find.widgetWithText(TextFormField, 'Words per player'), '7');
+    await tester.pump();
+
+    await addPlayer(tester, 'Alice');
+    await addPlayer(tester, 'Bob');
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Continue'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('wordsPerPlayer: 7'), findsOneWidget);
+  });
+
+  testWidgets('words per player is clamped to the 1-20 range', (tester) async {
+    await pump(tester);
+
+    await tester.enterText(find.widgetWithText(TextFormField, 'Words per player'), '99');
+    await tester.pump();
+
+    await addPlayer(tester, 'Alice');
+    await addPlayer(tester, 'Bob');
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Continue'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('wordsPerPlayer: 20'), findsOneWidget);
+  });
+
+  testWidgets('changing seconds per turn is reflected in the config passed onward', (tester) async {
+    await pump(tester);
+
+    await tester.enterText(find.widgetWithText(TextFormField, 'Seconds per turn'), '45');
+    await tester.pump();
+
+    await addPlayer(tester, 'Alice');
+    await addPlayer(tester, 'Bob');
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Continue'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('secondsPerTurn: 45'), findsOneWidget);
+  });
+
+  testWidgets('seconds per turn is clamped to the 10-300 range', (tester) async {
+    await pump(tester);
+
+    await tester.enterText(find.widgetWithText(TextFormField, 'Seconds per turn'), '5');
+    await tester.pump();
+
+    await addPlayer(tester, 'Alice');
+    await addPlayer(tester, 'Bob');
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Continue'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('secondsPerTurn: 10'), findsOneWidget);
+  });
+
+  testWidgets('decreasing number of players truncates already-entered names', (tester) async {
+    await pump(tester);
+
+    await tester.enterText(find.widgetWithText(TextFormField, 'Number of players'), '3');
+    await tester.pump();
+    await addPlayer(tester, 'Alice');
+    await addPlayer(tester, 'Bob');
+    await addPlayer(tester, 'Charlie');
+    expect(find.byIcon(Icons.delete), findsNWidgets(3));
+
+    await tester.enterText(find.widgetWithText(TextFormField, 'Number of players'), '2');
+    await tester.pump();
+
+    expect(find.byIcon(Icons.delete), findsNWidgets(2));
+    expect(find.text('Alice'), findsOneWidget);
+    expect(find.text('Bob'), findsOneWidget);
+    expect(find.text('Charlie'), findsNothing);
+    final continueButton = tester.widget<ElevatedButton>(
+      find.widgetWithText(ElevatedButton, 'Continue'),
+    );
+    expect(continueButton.onPressed, isNotNull);
+  });
+
+  testWidgets('submitting the player name field (keyboard "done") adds the player', (tester) async {
+    await pump(tester);
+
+    await tester.enterText(find.widgetWithText(TextField, 'Player name'), 'Alice');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pump(const Duration(milliseconds: 150));
+
+    expect(find.text('Alice'), findsOneWidget);
+    expect(find.byIcon(Icons.delete), findsOneWidget);
+  });
+
   testWidgets('tapping Continue navigates to /teams with the entered config', (tester) async {
     await pump(tester);
 
