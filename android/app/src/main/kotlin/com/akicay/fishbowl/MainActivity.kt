@@ -1,4 +1,4 @@
-package com.example.fishbowl
+package com.akicay.fishbowl
 
 import io.flutter.embedding.android.FlutterActivity
 
