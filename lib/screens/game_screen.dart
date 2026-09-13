@@ -50,17 +50,10 @@ class _GameScreenState extends State<GameScreen> {
       if (args == null) return;
       final int numTeams = args['numTeams'];
       if (mounted) {
-        if (_roundWords.isEmpty) {
-          setState(() {
-            _teamIdx = (_teamIdx + 1) % numTeams;
-            _showEndOfRound = true;
-          });
-        } else {
-          setState(() {
-            _teamIdx = (_teamIdx + 1) % numTeams;
-            _waitingForNextTeam = true;
-          });
-        }
+        setState(() {
+          _teamIdx = (_teamIdx + 1) % numTeams;
+          _waitingForNextTeam = true;
+        });
       }
     });
   }
@@ -243,65 +236,60 @@ class _GameScreenState extends State<GameScreen> {
                   // Gameplay info
                   if (_isPlaying) ...[
                     const SizedBox(height: 16),
-                    if (_remainingWords.isNotEmpty)
-                      Column(
-                        children: [
-                          Text(
-                            _remainingWords[_wordIdx],
-                            style: const TextStyle(
-                              fontSize: 40,
+                    Column(
+                      children: [
+                        Text(
+                          _remainingWords[_wordIdx],
+                          style: const TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF399EF1),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(
+                              255,
+                              48,
+                              199,
+                              48,
+                            ),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 18,
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF399EF1),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color.fromARGB(
-                                255,
-                                48,
-                                199,
-                                48,
-                              ),
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 18,
-                              ),
-                              textStyle: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _score++;
-                                String guessed = _remainingWords[_wordIdx];
-                                _roundWords.remove(guessed);
-                                _remainingWords.removeAt(_wordIdx);
-                                if (_roundWords.isEmpty) {
-                                  // End round immediately if last word guessed
-                                  _timer?.cancel();
-                                  _isPlaying = false;
-                                  _teamScores[_teamIdx] += _score;
-                                  _showEndOfRound = true;
-                                } else if (_remainingWords.isEmpty) {
-                                  _endTurn();
-                                } else {
-                                  _wordIdx = _wordIdx % _remainingWords.length;
-                                }
-                              });
-                            },
-                            icon: const Icon(Icons.check),
-                            label: const Text('Correct'),
-                          ),
-                        ],
-                      )
-                    else
-                      const Text('No more words!'),
+                          onPressed: () {
+                            setState(() {
+                              _score++;
+                              String guessed = _remainingWords[_wordIdx];
+                              _roundWords.remove(guessed);
+                              _remainingWords.removeAt(_wordIdx);
+                              if (_roundWords.isEmpty) {
+                                // End round immediately if last word guessed
+                                _timer?.cancel();
+                                _isPlaying = false;
+                                _teamScores[_teamIdx] += _score;
+                                _showEndOfRound = true;
+                              } else {
+                                _wordIdx = _wordIdx % _remainingWords.length;
+                              }
+                            });
+                          },
+                          icon: const Icon(Icons.check),
+                          label: const Text('Correct'),
+                        ),
+                      ],
+                    ),
                   ],
                   const SizedBox(height: 24),
                   Text('Words left: ${_roundWords.length}'),
