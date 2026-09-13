@@ -15,6 +15,7 @@ This project is a **Flutter application prototype** that allows teams to play Fi
 | [⚙️ Setup & Installation](./SETUP_GUIDE.md) | Step-by-step guide for running and building the project in VS Code. |
 | [🧩 Toolchain Setup](./TOOLCHAIN_SETUP.md) | Line-by-line explanation of installing the JDK/Android SDK/Flutter toolchain on Linux. |
 | [🚀 Publishing to Google Play](./PUBLISHING_GUIDE.md) | Step-by-step guide for signing, building, and releasing the app on Google Play. |
+| [📦 Distributing via GitHub Releases](./GITHUB_RELEASE_GUIDE.md) | How to share a downloadable APK directly from GitHub, without the Play Store. |
 | [📄 License](#-license) | Licensing information for the project. |
 | [📸 Screenshots](#-screenshots) | A few preview screens from the Fishbowl Game app. |
 
