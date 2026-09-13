@@ -11,6 +11,7 @@ This project is a **Flutter application prototype** that allows teams to play Fi
 | [🧩 How It Works](#-how-it-works) | Learn how the Fishbowl screens. |
 | [🛠️ Tech Stack](#️-tech-stack) | Tools and technologies used to build the app. |
 | [🚀 Future Improvements](#-future-improvements) | See what’s planned for future updates. |
+| [🧪 Development Mode (Dummy Data)](#-development-mode-dummy-data) | Skip manual setup while developing by pre-filling players and words. |
 | [📱 Purpose](#-purpose) | See the goal of this project is twofold. |
 | [⚙️ Setup & Installation](./SETUP_GUIDE.md) | Step-by-step guide for running and building the project in VS Code. |
 | [🧩 Toolchain Setup](./TOOLCHAIN_SETUP.md) | Line-by-line explanation of installing the JDK/Android SDK/Flutter toolchain on Linux. |
@@ -85,6 +86,18 @@ Teams take turns trying to guess as many words as possible within the given time
 - **Plugins:** Flutter & Dart extensions for VS Code  
 - **AI Assistance:** GitHub Copilot  
 
+
+## 🧪 Development Mode (Dummy Data)
+
+While developing, you can skip manually entering players and words on every hot restart by enabling the `USE_DUMMY_DATA` compile-time flag. This pre-fills the setup and word entry screens with sample data from [lib/data/dummy_data.dart](lib/data/dummy_data.dart).
+
+Run it from the command line:
+
+```bash
+flutter run --dart-define=USE_DUMMY_DATA=true
+```
+
+Or in VS Code, pick the **"Flutter Dev (dummy data)"** launch configuration from the Run and Debug dropdown (see [.vscode/launch.json](.vscode/launch.json)). Use **"Flutter Prod"** (or omit the flag) to run with real, empty input.
 
 ## 🚀 Future Improvements
 
