@@ -1,8 +1,9 @@
 # Testing Guide
 
-This project has a full Flutter widget/unit test suite under [`test/`](test/).
-There is no Flutter integration ("real device") test suite yet — everything
-here runs in the Flutter widget test harness (fast, no emulator needed).
+This project has a full Flutter widget/unit test suite under [`test/`](test/),
+which runs in the Flutter widget test harness (fast, no device needed), plus
+a Flutter integration test under [`integration_test/`](integration_test/) that
+drives the real, compiled app end-to-end on a real device or emulator.
 
 ## What's covered
 
@@ -19,6 +20,7 @@ here runs in the Flutter widget test harness (fast, no emulator needed).
 | `test/screens/end_of_round_screen_test.dart` | Score bar rendering, "Start Next Round" callback |
 | `test/screens/results_screen_test.dart` | Final score display, restart navigation |
 | `test/widget_test.dart` | App-level smoke test: routes, initial screen, setup → teams flow |
+| `integration_test/app_test.dart` | Full end-to-end game on a real device: Setup (add players) → Team Assignment → Word Entry → all 3 rounds (Taboo, Charades, One Word) → Results, asserting the final per-team scores |
 
 `test/test_helpers.dart` holds shared test utilities (see [Gotchas](#gotchas-this-suite-works-around) below).
 
@@ -48,6 +50,58 @@ Run with more verbose output (useful when a test hangs or you need to see
 ```bash
 flutter test --reporter expanded
 ```
+
+## Integration tests
+
+Unlike `test/`, which pumps widgets in a simulated harness, `integration_test/app_test.dart`
+launches the actual compiled app (`app.main()`) and drives it via real taps and
+text entry, on a real device/emulator (USB-connected phone, or a desktop/web
+target once that platform's build toolchain is set up). It plays through the
+full game once — 2 teams, 2 players, 4 words — guessing every word each round
+so rounds resolve immediately instead of waiting out the real turn timer, then
+asserts the final scores (Team 1: 8, Team 2: 4) on the Results screen.
+
+There are two ways to run it, and they behave differently:
+
+### `flutter test` — fast, headless
+
+```bash
+flutter devices                                       # find the device id
+flutter test integration_test/app_test.dart -d <id>
+```
+
+This is the one to use day-to-day and in CI: it installs and runs the real
+app, but renders off-screen for speed, so the device's screen won't show
+anything changing (see [Gotchas](#gotchas-this-suite-works-around) below). The
+whole run takes a few seconds.
+
+### `flutter drive` — slow, visible
+
+To actually watch the test drive the app on-screen (e.g. to sanity-check it
+by eye, like watching a Selenium run step through a browser), use the older
+`flutter drive` command instead, which requires the driver entrypoint at
+[`test_driver/integration_test.dart`](test_driver/integration_test.dart):
+
+```bash
+flutter drive \
+  --driver=test_driver/integration_test.dart \
+  --target=integration_test/app_test.dart \
+  -d <id>
+```
+
+By default this still runs at full speed (too fast to follow). Add
+`--dart-define=STEP_DELAY_MS=<ms>` to insert a real pause after every step:
+
+```bash
+flutter drive \
+  --driver=test_driver/integration_test.dart \
+  --target=integration_test/app_test.dart \
+  -d <id> \
+  --dart-define=STEP_DELAY_MS=800
+```
+
+`flutter drive` also rebuilds/reinstalls the APK each run (adds ~15-20s) and
+closes the app once the test finishes.
 
 ## Code coverage
 
@@ -152,6 +206,26 @@ this suite (see `test/test_helpers.dart` for the fixes):
    failure if the test finishes before they fire or are cancelled. Tests
    `pump()` with an explicit `Duration` long enough to flush these, or drive
    the UI to a state where the app code cancels the timer itself.
+
+These apply to `integration_test/app_test.dart` too, plus two that are
+specific to running on a real, live device:
+
+5. **`useTallTestViewport` breaks rendering on a real device.** It's built
+   for the offline `test/` suite, where the "device" is a virtual, resizable
+   test window. `integration_test/app_test.dart` deliberately does **not**
+   use it: overriding the window size against a real device's actual
+   physical display silently breaks frame rendering entirely — the widget
+   tree still responds to taps/text input under the hood, but nothing new
+   ever gets painted, leaving the screen stuck on `flutter_test`'s internal
+   "Test starting..." placeholder for the whole run. (This suite's player/word
+   lists are small enough that culling was never a risk anyway.)
+
+6. **`flutter test integration_test/...` doesn't render visibly on the
+   device**, even without the above bug — it deliberately runs the app
+   off-screen for speed. If you want to see it happen, use `flutter drive`
+   instead (see [Integration tests](#integration-tests) above); even then,
+   without `--dart-define=STEP_DELAY_MS=<ms>` the whole run completes in a
+   few seconds, too fast to visually follow.
 
 ## Adding new tests
 
