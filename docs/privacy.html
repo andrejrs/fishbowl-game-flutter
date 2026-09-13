@@ -5,58 +5,253 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Privacy Policy - Fishbowl Game</title>
 <style>
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 0 20px;
-    line-height: 1.6;
-    color: #222;
+  :root {
+    --bg: #f3f5f9;
+    --card: #ffffff;
+    --text: #1a1d29;
+    --muted: #5b6270;
+    --accent: #2563eb;
+    --accent-soft: #eef2ff;
+    --border: #e7e9f0;
   }
-  h1 { font-size: 1.8em; }
-  h2 { font-size: 1.3em; margin-top: 1.8em; }
-  .effective-date { color: #666; font-style: italic; }
-  ul { padding-left: 1.4em; }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1117;
+      --card: #171923;
+      --text: #eef0f5;
+      --muted: #9aa1b2;
+      --accent: #6d8bff;
+      --accent-soft: #1b2140;
+      --border: #262a38;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 48px 20px 80px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .brand-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-repo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.88rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .brand-repo-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+
+  .brand-emoji {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    object-fit: cover;
+  }
+
+  .brand-text h1 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .brand-text .tag {
+    margin: 2px 0 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px 44px;
+    box-shadow: 0 1px 3px rgba(15, 17, 23, 0.04), 0 10px 30px rgba(15, 17, 23, 0.03);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .card { box-shadow: none; }
+  }
+
+  h1.title {
+    font-size: 1.8rem;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+  }
+
+  .effective-date {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: var(--accent-soft);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 28px;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.02rem;
+  }
+
+  h2 {
+    font-size: 1.05rem;
+    margin: 2.2em 0 0.7em;
+    padding-top: 0.4em;
+    border-top: 1px solid var(--border);
+  }
+
+  h2:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  ul {
+    padding-left: 1.3em;
+    margin: 0.6em 0;
+  }
+
+  li { margin: 0.35em 0; }
+
+  .summary-box {
+    background: var(--accent-soft);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin: 1.2em 0 0;
+    font-size: 0.98rem;
+  }
+
+  strong { font-weight: 600; }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  a:hover { text-decoration: underline; }
+
+  .repo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+
+  .repo-link a {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  footer {
+    max-width: 720px;
+    margin: 28px auto 0;
+    padding: 0 4px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--accent); }
 </style>
 </head>
 <body>
+<div class="page">
 
-<h1>Privacy Policy for Fishbowl Game</h1>
-<p class="effective-date"><strong>Effective date:</strong> September 13, 2026</p>
+  <div class="brand">
+    <div class="brand-left">
+      <img class="brand-emoji" src="icon.png" alt="Fishbowl Game icon">
+      <div class="brand-text">
+        <h1>Fishbowl Game</h1>
+        <p class="tag">Privacy Policy</p>
+      </div>
+    </div>
+    <a class="brand-repo-link" href="https://github.com/andrejrs/fishbowl-game-flutter" target="_blank" rel="noopener">
+      <span>📦</span> View on GitHub
+    </a>
+  </div>
 
-<p>Fishbowl Game ("the app") is a local, offline party game. This policy explains what information the app handles.</p>
+  <div class="card">
+    <h1 class="title">Privacy Policy</h1>
+    <span class="effective-date">Effective September 13, 2026</span>
 
-<h2>Summary</h2>
-<p>Fishbowl Game does <strong>not</strong> collect, transmit, or share any personal data. Everything you enter stays on your device.</p>
+    <p class="lede">Fishbowl Game ("the app") is a local, offline party game. This policy explains what information the app handles.</p>
 
-<h2>Information the App Stores</h2>
-<p>The app uses local device storage (via Android's standard app storage mechanism) to save:</p>
-<ul>
-  <li>Player names you enter</li>
-  <li>Team names and scores</li>
-  <li>Words/phrases submitted for gameplay</li>
-</ul>
-<p>This information is stored <strong>only on your device</strong>. It is never sent to us, to any server, or to any third party. Uninstalling the app permanently deletes this data.</p>
+    <div class="summary-box">
+      Fishbowl Game does <strong>not</strong> collect, transmit, or share any personal data. Everything you enter stays on your device.
+    </div>
 
-<h2>Information We Do Not Collect</h2>
-<p>The app does not:</p>
-<ul>
-  <li>Connect to the internet or any external server</li>
-  <li>Use analytics, tracking, or advertising services</li>
-  <li>Access your contacts, location, camera, microphone, or photos</li>
-  <li>Share any data with third parties</li>
-  <li>Require you to create an account or provide personal identifying information</li>
-</ul>
+    <h2>Information the App Stores</h2>
+    <p>The app uses local device storage (via Android's standard app storage mechanism) to save:</p>
+    <ul>
+      <li>Player names you enter</li>
+      <li>Team names and scores</li>
+      <li>Words/phrases submitted for gameplay</li>
+    </ul>
+    <p>This information is stored <strong>only on your device</strong>. It is never sent to us, to any server, or to any third party. Uninstalling the app permanently deletes this data.</p>
 
-<h2>Children's Privacy</h2>
-<p>Fishbowl Game does not knowingly collect any personal information from anyone, including children under 13. Since the app collects no data at all, it can be used safely by players of any age under adult supervision as appropriate for the game's content.</p>
+    <h2>Information We Do Not Collect</h2>
+    <p>The app does not:</p>
+    <ul>
+      <li>Connect to the internet or any external server</li>
+      <li>Use analytics, tracking, or advertising services</li>
+      <li>Access your contacts, location, camera, microphone, or photos</li>
+      <li>Share any data with third parties</li>
+      <li>Require you to create an account or provide personal identifying information</li>
+    </ul>
 
-<h2>Changes to This Policy</h2>
-<p>If this policy changes in the future (for example, if the app adds online features), an updated version will be posted here with a new effective date.</p>
+    <h2>Children's Privacy</h2>
+    <p>Fishbowl Game does not knowingly collect any personal information from anyone, including children under 13. Since the app collects no data at all, it can be used safely by players of any age under adult supervision as appropriate for the game's content.</p>
 
-<h2>Contact</h2>
-<p>If you have questions about this privacy policy, contact:</p>
-<p><strong>Andrej</strong> — <a href="mailto:akicay@gmail.com">akicay@gmail.com</a></p>
+    <h2>Changes to This Policy</h2>
+    <p>If this policy changes in the future (for example, if the app adds online features), an updated version will be posted here with a new effective date.</p>
 
+    <h2>Contact</h2>
+    <p>If you have questions about this privacy policy, contact <strong>Andrej</strong> — <a href="mailto:akicay@gmail.com">akicay@gmail.com</a>.</p>
+  </div>
+
+  <footer>
+    <span>Fishbowl Game</span>
+  </footer>
+
+</div>
 </body>
 </html>
