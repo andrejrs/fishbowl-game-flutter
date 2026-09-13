@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privacy Policy - Fishbowl Game</title>
+<title>Fishbowl Game</title>
 <style>
   :root {
     --bg: #f3f5f9;
@@ -140,7 +140,7 @@
     padding-top: 0;
   }
 
-  ul {
+  ul, ol {
     padding-left: 1.3em;
     margin: 0.6em 0;
   }
@@ -155,6 +155,74 @@
     font-size: 0.98rem;
   }
 
+  .rounds {
+    display: grid;
+    gap: 12px;
+    margin: 1em 0 0;
+  }
+
+  .round-card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 18px;
+  }
+
+  .round-card .round-num {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 2px 9px;
+    border-radius: 999px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .round-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 1em 0 0;
+  }
+
+  .badge {
+    font-size: 0.85rem;
+    color: var(--text);
+    background: var(--accent-soft);
+    padding: 5px 12px;
+    border-radius: 999px;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 1em 0 0;
+  }
+
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.92rem;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 999px;
+  }
+
+  .links a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+
   strong { font-weight: 600; }
 
   a {
@@ -162,20 +230,6 @@
     text-decoration: none;
   }
   a:hover { text-decoration: underline; }
-
-  .repo-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 10px;
-    font-size: 0.92rem;
-    color: var(--muted);
-  }
-
-  .repo-link a {
-    color: var(--text);
-    font-weight: 500;
-  }
 
   footer {
     max-width: 720px;
@@ -201,7 +255,7 @@
       <img class="brand-emoji" src="icon.png" alt="Fishbowl Game icon">
       <div class="brand-text">
         <h1>Fishbowl Game</h1>
-        <p class="tag">Privacy Policy</p>
+        <p class="tag">Digital party word game, built with Flutter</p>
       </div>
     </div>
     <a class="brand-repo-link" href="https://github.com/andrejrs/fishbowl-game-flutter" target="_blank" rel="noopener">
@@ -210,46 +264,60 @@
   </div>
 
   <div class="card">
-    <h1 class="title">Privacy Policy</h1>
-    <span class="effective-date">Effective September 13, 2026</span>
+    <h1 class="title">Fishbowl Game</h1>
+    <span class="effective-date">Free · Offline · No ads</span>
 
-    <p class="lede">Fishbowl Game ("the app") is a local, offline party game. This policy explains what information the app handles.</p>
+    <p class="lede">A fun, team-based party game where players guess words or phrases from a "fishbowl" across three rounds. No paper, no pens, no setup hassle, just open the app and play.</p>
 
     <div class="summary-box">
-      Fishbowl Game does <strong>not</strong> collect, transmit, or share any personal data. Everything you enter stays on your device.
+      Fishbowl is a <strong>local, offline</strong> game. Everything runs on the device, no accounts, no internet connection, no ads.
     </div>
 
-    <h2>Information the App Stores</h2>
-    <p>The app uses local device storage (via Android's standard app storage mechanism) to save:</p>
-    <ul>
-      <li>Player names you enter</li>
-      <li>Team names and scores</li>
-      <li>Words/phrases submitted for gameplay</li>
-    </ul>
-    <p>This information is stored <strong>only on your device</strong>. It is never sent to us, to any server, or to any third party. Uninstalling the app permanently deletes this data.</p>
+    <h2>How the Game Works</h2>
+    <p>Teams take turns trying to guess as many words as possible within a time limit, using the same set of words across three rounds:</p>
+    <div class="rounds">
+      <div class="round-card">
+        <span class="round-num">ROUND 1</span>
+        <p><strong>Taboo (Verbal Explanation)</strong>, Describe the word using any words except the word itself.</p>
+      </div>
+      <div class="round-card">
+        <span class="round-num">ROUND 2</span>
+        <p><strong>Charades</strong> Act out the word without speaking.</p>
+      </div>
+      <div class="round-card">
+        <span class="round-num">ROUND 3</span>
+        <p><strong>One Word</strong> Describe the term using only one word.</p>
+      </div>
+    </div>
 
-    <h2>Information We Do Not Collect</h2>
-    <p>The app does not:</p>
-    <ul>
-      <li>Connect to the internet or any external server</li>
-      <li>Use analytics, tracking, or advertising services</li>
-      <li>Access your contacts, location, camera, microphone, or photos</li>
-      <li>Share any data with third parties</li>
-      <li>Require you to create an account or provide personal identifying information</li>
-    </ul>
+    <h2>Getting Started</h2>
+    <ol>
+      <li>Set the number of teams, players, words per player, and the time limit.</li>
+      <li>Add player names, the app randomly assigns everyone to teams.</li>
+      <li>Each player submits their words for the fishbowl.</li>
+      <li>Play through all three rounds, tapping <strong>Correct</strong> as words are guessed.</li>
+      <li>See the final scores on the results screen.</li>
+    </ol>
 
-    <h2>Children's Privacy</h2>
-    <p>Fishbowl Game does not knowingly collect any personal information from anyone, including children under 13. Since the app collects no data at all, it can be used safely by players of any age under adult supervision as appropriate for the game's content.</p>
+    <h2>Built With</h2>
+    <div class="badges">
+      <span class="badge">Flutter</span>
+      <span class="badge">Dart</span>
+    </div>
 
-    <h2>Changes to This Policy</h2>
-    <p>If this policy changes in the future (for example, if the app adds online features), an updated version will be posted here with a new effective date.</p>
+    <h2>Links</h2>
+    <div class="links">
+      <a href="https://github.com/andrejrs/fishbowl-game-flutter" target="_blank" rel="noopener">📦 GitHub Repository</a>
+      <a href="privacy.html">🔒 Privacy Policy</a>
+    </div>
 
     <h2>Contact</h2>
-    <p>If you have questions about this privacy policy, contact <a href="mailto:akicay@gmail.com">akicay@gmail.com</a>.</p>
+    <p>Questions or feedback? Reach out to <a href="mailto:akicay@gmail.com">akicay@gmail.com</a>.</p>
   </div>
 
   <footer>
     <span>Fishbowl Game</span>
+    <a href="privacy.html">Privacy Policy</a>
   </footer>
 
 </div>
